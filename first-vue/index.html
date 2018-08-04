@@ -17,6 +17,10 @@
         .yellow {
             color: yellow;
         }
+
+        [v-cloak] {
+            display: none;
+        }
     </style>
 </head>
 
@@ -30,7 +34,8 @@
                         <label class="input-group-text" :class="classes" for="exampleFormControlInput1">Name</label>
                     </div>
 
-                    <input type="text" class="form-control" :class="{ 'active': isInputActive, error: isInputError }" id="exampleFormControlInput1" placeholder="Your name" v-model="name">
+                    <input type="text" class="form-control" :class="{ 'active': isInputActive, error: isInputError }" id="exampleFormControlInput1"
+                        placeholder="Your name" v-model="name">
                     <div class="input-group-append">
                         <button class="btn btn-outline-secondary" type="button" id="button-addon2">Disable name input</button>
                     </div>
@@ -40,6 +45,9 @@
             <p>Now: {{date | formatDate}}</p>
             <p>Now Time Compute: {{ nowTime }}</p>
             <p>Now Time Method: {{nowTimeMethod()}}</p>
+
+            <!-- Call once -->
+            <p v-once>Now Time Method Once: {{nowTimeMethod()}}</p>
             <p>{{link}}</p>
             <p v-pre>{{This content can't be rendered.}}</p>
             <p>{{ number / 10}}</p>
@@ -55,7 +63,7 @@
                 <a :href="url">This is a syntactic sugar binding data link.</a>
             </p>
             <p>
-                <img v-bind:src="imageUrl" v-if="imageShow" alt="">
+                <img v-bind:src="imageUrl" v-if="imageShow" alt="" v-cloak>
             </p>
             <p>
                 <button v-on:click="handleCloseLink">Hide the image.</button>
@@ -66,9 +74,93 @@
             <p>
                 <button v-on:click="handleHideImage">Hide the image with v-on patten.</button>
             </p>
+
+            <!-- Array classname -->
             <p :class="mutipleClassArr">Mutiple class array test</p>
+
+            <!-- Computed classname -->
             <button :class="classesWithComputed">Mutiple class array with computed attribute</button>
+
+            <!-- Inline class -->
             <p :style="styles">Inline style</p>
+
+            <!-- If elsefi else -->
+            <p v-if="status === 1">If status is 1 show this line.</p>
+            <p v-else-if="status === 2">If status is 2 show this line</p>
+            <p v-else>Otherwise show this line</p>
+
+            <!-- Mutiple elements -->
+            <template v-if="status === 1">
+                <p>This is a mutiple element.</p>
+                <p>This is a mutiple element.</p>
+                <p>This is a mutiple element.</p>
+            </template>
+
+            <!-- Cache element and clear cache use key attribute. -->
+            <div class="form-row">
+                <div class="input-group col-md-8">
+                    <template v-if="type === 'name'">
+                        <div class="input-group-prepend">
+                            <label class="input-group-text" for="exampleFormControlInput1">Name</label>
+                        </div>
+                        <input type="text" class="form-control" placeholder="Please enter an user name." key="name-input">
+                    </template>
+                    <template v-else>
+                        <div class="input-group-prepend">
+                            <label class="input-group-text" for="exampleFormControlInput1">Email</label>
+                        </div>
+                        <input type="text" class="form-control" placeholder="Please enter an Email address." key="mail-input">
+                    </template>
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-secondary" type="button" id="button-addon2" @click="handleToggleClick">Switch input type.</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- v-show -->
+            <p v-show="status === 1">When the status value is 1, show this paragraph.</p>
+
+            <!-- v-for -->
+            <ul>
+                <li v-for="(book, index) in books" :key="index">{{index}} - {{book.name}}</li>
+            </ul>
+
+            <!-- v-for with mutiple elements -->
+            <template v-for="(book, index) in books">
+                <ul>
+                    <li>Book's name: {{book.name}}</li>
+                    <li>Book's Author: {{book.author}}</li>
+                </ul>
+            </template>
+            <p>
+                <button @click="handleAddNewbook">Add a new book</button>
+            </p>
+
+            <!-- v-for object attribute -->
+            <ul>
+                <li v-for="(objectItem, key, index) in user" :key="index">{{index}}-{{key}}:{{objectItem}}</li>
+            </ul>
+
+            <!-- v-for loop number -->
+            <ul>
+                <li v-for="num in 10">{{num}}</li>
+            </ul>
+            <!-- v-for with filter -->
+            <ul>
+                <template v-for="book in filterbooks">
+                    <li>{{book.name}}</li>
+                </template>
+            </ul>
+            <hr>
+            
+            <!-- v-on -->
+            <p>
+                <span>Click count: {{clickCount}}</span>
+                <button @click="clickCount++">+1</button>
+                <button @click="handleAdd(10)">+10</button>
+                <button @click="handleTransmitEvent('Donnot open it', $event)">Stop click event</button>
+                <a href="http://google.com" @click.stop.prevent="handleStopModifiler">Go to google.</a>
+            </p>
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js"></script>
@@ -95,7 +187,28 @@
                 styles: {
                     color: 'red',
                     fontSize: 14 + 'px'
-                }
+                },
+                status: 1,
+                type: 'name',
+                books: [{
+                        name: 'Vue fight on real',
+                        author: 'Jason Zhang'
+                    },
+                    {
+                        name: 'Javascript performance',
+                        author: 'Jason Zhang'
+                    },
+                    {
+                        name: 'Javascript senior development',
+                        author: 'Jason Zhang'
+                    }
+                ],
+                user: {
+                    name: 'Jason Zhang',
+                    age: 32,
+                    gender: 'male'
+                },
+                clickCount: 0
             },
             created() {
                 console.log(this.name);
@@ -140,6 +253,25 @@
                 },
                 nowTimeMethod() {
                     return Date.now();
+                },
+                handleToggleClick() {
+                    this.type = this.type === 'name' ? 'email' : 'name';
+                },
+                handleAddNewbook() {
+                    this.books.push({
+                        name: 'Javascript cook book',
+                        author: 'Jason Zhang'
+                    });
+                },
+                handleAdd(count){
+                    this.clickCount += count;
+                },
+                handleTransmitEvent(message, event){
+                    event.preventDefault();
+                    window.alert(message);
+                },
+                handleStopModifiler(){
+                    console.log('Stop stop stop.');
                 }
             },
             //cached
@@ -150,22 +282,30 @@
                 nowTime() {
                     return Date.now();
                 },
-                classes(){
+                classes() {
                     return {
                         active: this.isInputActive && !this.isInputError
                     }
                 },
-                classesWithComputed(){
+                classesWithComputed() {
                     return [
                         'btn',
                         {
-                            ['btn-' + this.name] : this.name == 'Jason'
+                            ['btn-' + this.name]: this.name == 'Jason'
                         }
                     ]
+                },
+                filterbooks() {
+                    return this.books.filter(function (book) {
+                        return book.name.match(/Javascript/);
+                    });
                 }
             }
         });
-
+        Vue.set(app.books, 1, {
+            name: 'Vue fight with yourself',
+            author: 'Jason Zhang'
+        });
     </script>
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
         crossorigin="anonymous"></script>
