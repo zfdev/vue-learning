@@ -1,8 +1,9 @@
 Vue.component('my-component', {
-    template: '<div>{{message}}</div>',
+    props: ['parentMessage'],
     data: function () {
         return {
-            message: 'This is the component content.'
+            msg: 'This data is in the child component.',
+            message: this.parentMessage
         }
     }
 });
@@ -10,7 +11,7 @@ Vue.component('my-component', {
 var app = new Vue({
     el: '#app',
     data:{
-
+        message: 'The data is in the prarent component.'
     },
     computed:{
 
