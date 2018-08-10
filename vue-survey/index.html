@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Vue Survey</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+        crossorigin="anonymous">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        [v-cloak] {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app" v-cloak>
+        <div class="container">
+            <!-- Vue component -->
+            <h2>Vue Survey</h2>
+            <hr>
+            <form action="#">
+                <jason-pane v-model="step" :panel-name="'step1'">
+                    <div class="form-row" slot="content">
+                        <jason-form>
+                            <label for="">1.Please choose your gender:</label>
+                            <div class="custom-control custom-radio">
+                                <input type="radio" id="sexMale" name="gender" v-model="form.step1.data" class="custom-control-input" value="male">
+                                <label class="custom-control-label" for="sexMale">Male</label>
+                            </div>
+                            <div class="custom-control custom-radio">
+                                <input type="radio" id="sexFemale" name="gender" v-model="form.step1.data" class="custom-control-input" value="female">
+                                <label class="custom-control-label" for="sexFemale">Female</label>
+                            </div>
+                            <div class="custom-control custom-radio">
+                                <input type="radio" id="sexSecret" name="gender" v-model="form.step1.data" class="custom-control-input" value="secret">
+                                <label class="custom-control-label" for="sexSecret">Secret</label>
+                            </div>
+                            <p>Select:
+                                <strong>{{form.step1.data}}</strong>
+                            </p>
+                        </jason-form>
+                    </div>
+                    <div class="form-row" slot="action">
+                        <div class="col">
+                            <jason-button v-model="form.step1.pass" @on-click="changeStep" :jump-target="'step2'">Next</jason-button>
+                        </div>
+                        <div class="col">
+                            <jason-button v-model="form.step1.pass" :my-color="'warning'" @reset-data="resetData" :reset-step="'step1'">Reset</jason-button>
+                        </div>
+                    </div>
+                </jason-pane>
+                <jason-pane v-model="step" :panel-name="'step2'">
+                    <div class="form-row" slot="content">
+                        <jason-form>
+                            <label for="">2.Please choose your hobby:</label>
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" v-model="form.step2.data" id="readBook" value="readBook">
+                                <label class="custom-control-label" for="readBook">Read book</label>
+                            </div>
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" v-model="form.step2.data" id="swimming" value="swimming">
+                                <label class="custom-control-label" for="swimming">Swimming</label>
+                            </div>
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" v-model="form.step2.data" id="running" value="running">
+                                <label class="custom-control-label" for="running">Running</label>
+                            </div>
+
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" v-model="form.step2.data" id="movie" value="movie">
+                                <label class="custom-control-label" for="movie">Movie</label>
+                            </div>
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" v-model="form.step2.data" id="music" value="music">
+                                <label class="custom-control-label" for="music">Music</label>
+                            </div>
+                        </jason-form>
+                    </div>
+                    <div class="form-row" slot="action">
+                        <div class="col">
+                            <jason-button @on-click="changeStep" :jump-target="'step1'">Previous</jason-button>
+                        </div>
+                        <div class="col">
+                            <jason-button v-model="form.step2.pass" @on-click="changeStep" :jump-target="'step3'">Next</jason-button>
+                        </div>
+                        <div class="col">
+                            <jason-button :my-color="'warning'" @reset-data="resetData" :reset-step="'step2'">Reset</jason-button>
+                        </div>
+                    </div>
+                </jason-pane>
+                <jason-pane v-model="step" :panel-name="'step3'">
+                    <div class="form-row" slot="content">
+                        <jason-form>
+                            <label for="">3.Please introduce yourself.</label>
+                            <textarea v-model="form.step3.data" class="form-control" aria-label="With textarea" placeholder="No less than 10 words."></textarea>
+                        </jason-form>
+                    </div>
+                    <div class="form-row" slot="action">
+                        <div class="col">
+                            <jason-button @on-click="changeStep" :jump-target="'step2'">Previous</jason-button>
+                        </div>
+                        <div class="col">
+                            <jason-button v-model="form.step3.pass" :my-color="'success'">Submit</jason-button>
+                        </div>
+                        <div class="col">
+                            <jason-button :my-color="'warning'" @reset-data="resetData" :reset-step="'step3'">Reset</jason-button>
+                        </div>
+                    </div>
+                </jason-pane>
+            </form>
+
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js"></script>
+    <script src="form-element.js"></script>
+    <script src="button.js"></script>
+    <script src="jason-pane.js"></script>
+    <script src="index.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>
