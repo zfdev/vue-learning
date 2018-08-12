@@ -1,20 +1,20 @@
-Vue.component('ele', {
-    template: '\
-    <div id="element"\
-    :class="{show:show}"\
-    @click="handleClick">Text Content\
-    </div>',
-    data: function(){
-        return{
-            show: true
-        }
-    },
-    methods:{
-        handleClick: function(){
-            console.log('Clicked');
-        }
-    }
-});
+// Vue.component('ele', {
+//     template: '\
+//     <div id="element"\
+//     :class="{show:show}"\
+//     @click="handleClick">Text Content\
+//     </div>',
+//     data: function(){
+//         return{
+//             show: true
+//         }
+//     },
+//     methods:{
+//         handleClick: function(){
+//             console.log('Clicked');
+//         }
+//     }
+// });
 
 Vue.component('ele', {
     render: function(createElement){
