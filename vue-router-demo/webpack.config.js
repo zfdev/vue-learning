@@ -4,13 +4,14 @@ const VueLoaderPlugin = require('vue-loader/lib/plugin');
 
 var config = {
     entry: {
-        main: './main'
+        main: './main.js'
     },
     output: {
         path: path.join(__dirname, './dist'),
         publicPath: '/dist/',
         filename: 'main.js'
     },
+    devtool: 'eval-source-map', //souremao setting
     module: {
         rules: [
             {
